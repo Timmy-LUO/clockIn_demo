@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
+import 'package:clock_in_demo/models/news_model.dart';
 
 final punchProvider = StateNotifierProvider.autoDispose<PunchViewModel, PunchState>((ref) => PunchViewModel());
 
@@ -9,6 +10,8 @@ final class PunchViewModel extends StateNotifier<PunchState> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       _updateTime();
     });
+
+    _getNews();
   }
 
   Timer? _timer;
@@ -73,6 +76,24 @@ final class PunchViewModel extends StateNotifier<PunchState> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+
+  /// request demo
+  void _getNews() {
+    NewsRequestModel().request(
+      successCallBack: (data) {
+        final model = NewsResponseModel.fromJson(data);
+        if (model.total == 0) {
+          print('No data');
+          return;
+        }
+        print('Total: ${model.total}');
+      },
+      errorCallBack: (code, message) {
+        print('Error: $code, $message');
+      }
+    );
   }
 }
 

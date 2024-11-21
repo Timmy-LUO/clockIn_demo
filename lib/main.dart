@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:clock_in_demo/route_generator.dart' as router;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:clock_in_demo/network/http_service.dart';
 
 void main() {
+  HttpService service = HttpService.instance;
+  service.initDio();
+
   runApp(
       const ProviderScope(child: MyApp())
   );
